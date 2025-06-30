@@ -4,7 +4,17 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
-const authRoutes = require('./routes/auth');
+
+// Routes (choose ONE approach below)
+// --------------------------------------------------
+// OPTION 1: If you MOVED files to /routes folder:
+const authRoutes = require('./controllers/auth');
+const userRoutes = require('./models/user');
+
+// OPTION 2: If keeping files in ROOT:
+// const authRoutes = require('./auth');
+// const userRoutes = require('./user');
+// --------------------------------------------------
 
 const app = express();
 
@@ -22,8 +32,9 @@ mongoose.connect(process.env.MONGODB_URI, {
 .then(() => console.log('Connected to MongoDB'))
 .catch(err => console.error('MongoDB connection error:', err));
 
-// Routes
+// Route Middlewares
 app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes);  // Example additional route
 
 // Start server
 const PORT = process.env.PORT || 5000;
